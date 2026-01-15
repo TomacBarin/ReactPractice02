@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
 function App() {
+  const [count, setCount] = useState(0);
+  const [step, setStep] = useState(1); 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Fisklimpa numero {count}</h1>
+      <input 
+      type="number"
+      value={step}
+      onChange={(event) => setStep(Number(event.target.value))}
+      />
+      <button onClick={() => setCount(prev => prev + step)}>Öka</button>
+      <button onClick={() => setCount(prev => prev - step)}>Minska</button>
+      <button onClick={() => setCount(0)}>Nollställ</button>
+      {/* Räknaren */}
     </div>
-  );
+    
+  )
 }
 
 export default App;
