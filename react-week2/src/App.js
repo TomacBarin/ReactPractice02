@@ -1,103 +1,106 @@
 import React, { useState } from 'react';
-import './App.css'; // behåll om du vill styling
+import './App.css';
 
 function App() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  // Beräknad filtrerad lista (räknas ut varje gång från todos + filter)
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'active') return !todo.completed;
+    if (filter === 'completed') return todo.completed;
+    return true; // 'all'
   });
 
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
+  const addTodo = () => {
+    if (newTodo.trim() === '') return;
 
-  // Funktion för att validera ett fält
-  const validateField = (name, value) => {
-    let error = '';
+    const newItem = {
+      id: Date.now(),
+      text: newTodo.trim(),
+      completed: false,
+    };
 
-    if (name === 'name') {
-      if (value.trim().length < 2) {
-        error = 'Namnet måste vara minst 2 tecken långt';
-      }
-    } else if (name === 'email') {
-      if (!value.includes('@')) {
-        error = 'E-post måste innehålla @';
-      }
-    } else if (name === 'password') {
-      if (value.length < 8) {
-        error = 'Lösenordet måste vara minst 8 tecken långt';
-      }
-    }
-
-    return error;
+    setTodos(prev => [...prev, newItem]);
+    setNewTodo('');
   };
 
-  // Hantera förändring i input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const toggleComplete = id => {
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
 
-    // Uppdatera formulärdata
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-
-    // Validera och uppdatera error för just det fältet
-    const error = validateField(name, value);
-    setErrors(prev => ({
-      ...prev,
-      [name]: error
-    }));
+  const removeTodo = id => {
+    setTodos(prev => prev.filter(todo => todo.id !== id));
   };
 
   return (
-    <div className="form-container">
-      <h1>Registrera dig</h1>
+    <div className="todo-container">
+      <h1>Att göra-lista</h1>
 
-      <form>
-        <div className="form-group">
-          <label htmlFor="name">Namn:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          {errors.name && <p className="error">{errors.name}</p>}
-        </div>
+      <div className="add-todo">
+        <input
+          type="text"
+          value={newTodo}
+          onChange={e => setNewTodo(e.target.value)}
+          placeholder="Vad ska du göra idag?"
+          onKeyDown={e => {
+            if (e.key === 'Enter') addTodo();
+          }}
+        />
+        <button onClick={addTodo}>Lägg till</button>
+      </div>
 
-        <div className="form-group">
-          <label htmlFor="email">E-post:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <p className="error">{errors.email}</p>}
-        </div>
+      <ul className="todo-list">
+        {filteredTodos.map(todo => (
+          <li
+            key={todo.id}
+            className={todo.completed ? 'completed' : ''}
+          >
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleComplete(todo.id)}
+            />
+            <span>{todo.text}</span>
+            <button
+              className="delete-btn"
+              onClick={() => removeTodo(todo.id)}
+            >
+              Ta bort
+            </button>
+          </li>
+        ))}
+      </ul>
 
-        <div className="form-group">
-          <label htmlFor="password">Lösenord:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p className="error">{errors.password}</p>}
-        </div>
+      {todos.length === 0 && (
+        <p className="empty-message">Inga uppgifter än – lägg till något!</p>
+      )}
 
-        <button type="submit" disabled>
-          Registrera (kommer senare)
+      <div className="filters">
+        <button
+          className={filter === 'all' ? 'active' : ''}
+          onClick={() => setFilter('all')}
+        >
+          Alla
         </button>
-      </form>
+        <button
+          className={filter === 'active' ? 'active' : ''}
+          onClick={() => setFilter('active')}
+        >
+          Aktiva
+        </button>
+        <button
+          className={filter === 'completed' ? 'active' : ''}
+          onClick={() => setFilter('completed')}
+        >
+          Klara
+        </button>
+      </div>
     </div>
   );
 }
