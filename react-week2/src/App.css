@@ -80,3 +80,90 @@ button:hover {
 .filters button:hover {
   background: #5a6268;
 }
+
+.posts-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px;
+  font-size: 1.1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+}
+
+.refresh-btn {
+  display: block;
+  margin: 0 auto 30px;
+  padding: 10px 25px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.refresh-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.loading,
+.error-message {
+  text-align: center;
+  font-size: 1.3rem;
+  padding: 40px;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+.posts-list {
+  display: grid;
+  gap: 20px;
+}
+
+.post-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+}
+
+.post-card h2 {
+  margin-top: 0;
+  color: #007bff;
+}
+
+.post-card p {
+  line-height: 1.6;
+  color: #555;
+}
+
+.post-card small {
+  color: #888;
+  display: block;
+  margin-top: 10px;
+}
